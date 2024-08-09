@@ -30,9 +30,9 @@ def validation():
         return
     if auth.authorization_header(request) is None:
         abort(401)
-    if auth.current_user(request) in None:
+    if auth.current_user(request) is None:
         abort(403)
-        
+
 
 @app.errorhandler(404)
 def not_found(error) -> str:
