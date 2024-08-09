@@ -62,3 +62,12 @@ class BasicAuth(Auth):
         except Exception:
             return None
         return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """ complete Basic authentication """
+        auth_header = self.authorization_header(request)
+        b64_auth_header = self.extract_base64_authorization_header(auth_header)
+        decoded_auth_header = self.decode_base64_authorization_header(
+                                                b64_auth_header)
+        user, pwd = self.extract_user_credentials(decoded_auth_header)
+        return self.user_object_from_credentials(user, pwd)
