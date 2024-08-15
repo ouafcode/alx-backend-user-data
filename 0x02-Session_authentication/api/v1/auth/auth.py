@@ -2,10 +2,10 @@
 """ Manage API Authentification """
 from flask import request
 from typing import List, TypeVar
-import fnmatch
+import os
 
 
-class Auth():
+class Auth:
     """ Manage API Authentification """
     def require_auth(self, path: str,
                      excluded_paths: List[str]) -> bool:
@@ -32,5 +32,5 @@ class Auth():
         """ docs docs """
         if request is None:
             return None
-        my_session_id = os.getenv('SESSION_NAME')
-        return request.cookies.get(my_session_id)
+        session_name = os.getenv('SESSION_NAME')
+        return request.cookies.get(session_name)
