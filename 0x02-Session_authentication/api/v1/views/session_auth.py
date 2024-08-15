@@ -6,8 +6,8 @@ from flask import abort, jsonify, request
 from models.user import User
 
 
-@app_views.route('/login', methods=['POST'], strict_slashes=False)
-def view_session():
+@app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+def auth_session():
     """ docs docs """
     email = request.form.get('email')
     password = request.form.get('password')
