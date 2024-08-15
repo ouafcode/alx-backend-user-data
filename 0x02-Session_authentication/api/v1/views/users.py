@@ -25,13 +25,19 @@ def view_one_user(user_id: str = None) -> str:
       - User object JSON represented
       - 404 if the User ID doesn't exist
     """
-    if user_id == 'me' and request.current_user is None:
+    if user_id is None:
         abort(404)
-    return jsonify(request.current_user.to_dict())
-    user = storage.get(User, user_id)
+    if user_id == "me":
+        if request.current_user is None:
+            abort(404)
+        user = request.current_user
+        return jsonify(user.to_json())
+    user = User.get(user_id)
     if user is None:
         abort(404)
-    return jsonify(user.to_dict())
+    if request.current_user is None:
+        abort(404)
+    return jsonify(user.to_json())
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
@@ -121,11 +127,3 @@ def update_user(user_id: str = None) -> str:
         user.last_name = rj.get('last_name')
     user.save()
     return jsonify(user.to_json()), 200
-
-
-@app_views.route('/users/me', methods=['GET'], strict_slashes=False)
-def get_user_me():
-    """doc doc"""
-    if request.current_user is None:
-        abort(404)
-    return jsonify()
